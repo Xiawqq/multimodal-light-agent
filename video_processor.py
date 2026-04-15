@@ -1,3 +1,10 @@
+"""
+
+视频模态处理
+
+"""
+
+
 import cv2
 
 
@@ -81,15 +88,22 @@ def get_video_fps(video_path: str):
 
 
 # 计算视频总帧数 + 展示第一帧 + 交互说明
-def process_video(video_path: str):
+def process_video(video_path: str, task_detail: str):
 
     frame_count = count_frames(video_path)
     fps = get_video_fps(video_path)
 
     if frame_count == -1 or fps == -1 or fps == 0:
         return "视频打开失败或无法获取视频信息"
-    else:
-        duration = frame_count / fps
-        show_first_frame(video_path)
 
-    return f"已成功读取并展示视频第一帧，视频总帧数为：{frame_count}，视频时长约为：{duration:.2f} 秒"
+    duration = frame_count / fps
+
+    if task_detail == "duration":
+        return f"视频时长约为：{duration:.2f} 秒"
+
+    elif task_detail == "frame_count":
+        return f"视频总帧数为：{frame_count}"
+
+    else:
+        show_first_frame(video_path)
+        return f"已成功读取并展示视频第一帧，视频总帧数为：{frame_count}，视频时长约为：{duration:.2f} 秒"

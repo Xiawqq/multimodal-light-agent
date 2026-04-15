@@ -67,13 +67,29 @@ def count_frames(video_path: str):
     return frame_count
 
 
+# 获取视频 FPS
+def get_video_fps(video_path: str):
+    cap = cv2.VideoCapture(video_path)
+
+    if not cap.isOpened():
+        return -1
+
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    cap.release()
+
+    return fps
+
+
 # 计算视频总帧数 + 展示第一帧 + 交互说明
 def process_video(video_path: str):
-    frame_count = count_frames(video_path)
 
-    if frame_count == -1:
-        return "视频打开失败"
+    frame_count = count_frames(video_path)
+    fps = get_video_fps(video_path)
+
+    if frame_count == -1 or fps == -1 or fps == 0:
+        return "视频打开失败或无法获取视频信息"
     else:
+        duration = frame_count / fps
         show_first_frame(video_path)
 
-    return f"已成功读取并展示视频第一帧，视频总帧数为：{frame_count}"
+    return f"已成功读取并展示视频第一帧，视频总帧数为：{frame_count}，视频时长约为：{duration:.2f} 秒"

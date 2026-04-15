@@ -20,7 +20,15 @@ def route_video_question(question: str):
 
     if "多长" in question or "时长" in question or "多久" in question or "duration" in question:
         return "duration"
+
     elif "多少帧" in question or "帧数" in question or "frame" in question:
         return "frame_count"
-    else:
+
+    elif "活动" in question or "运动" in question:
+        return "motion"
+
+    elif "主要内容" in question or "主要讲了什么" in question or "概括" in question:
         return "summary"
+
+    else:
+        return "content"

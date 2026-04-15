@@ -1,7 +1,9 @@
-def route(question):
-    if "干什么" in question:
-        return "action"
-    elif "什么时候" in question:
-        return "time"
+def route_question(question: str):
+    question = question.lower()
+
+    if "视频" in question or "video" in question:
+        return "video"
+    elif "图" in question or "image" in question:
+        return "image"
     else:
-        return "unknown"
+        return "text"

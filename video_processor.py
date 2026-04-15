@@ -41,3 +41,7 @@ def show_first_frame(video_path):
 
     cap.release()
     cv2.destroyAllWindows()
+
+def process_video(video_path: str):
+    show_first_frame(video_path)
+    return f"已成功读取并展示视频第一帧：{video_path}"

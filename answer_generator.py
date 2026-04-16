@@ -9,6 +9,9 @@ def generate_answer(task_detail: str, result):
     elif task_detail == "motion":
         return f"关于活动情况的判断如下：{result}"
 
+    elif task_detail == "change_time":
+        return f"关于视频变化时间的分析如下：{result}"
+
     elif task_detail == "summary":
         return f"视频内容概括如下：{result}"
 

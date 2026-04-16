@@ -5,6 +5,7 @@ import answer_generator
 
 
 def main():
+
     question = input("请输入你的问题：")
     task_type = router.route_question(question)
 
@@ -31,13 +32,13 @@ def main():
             result = analysis.analyze_video_content("test.mp4")
 
         answer = answer_generator.generate_answer(task_detail, result)
-        print("回答：", answer)
+        print(answer)
 
     elif task_type == "image":
-        print("回答：暂时还不支持图像处理。")
+        print("系统回答：暂时还不支持图像处理。")
 
     else:
-        print("回答：这是普通文本问题，当前版本暂时不处理。")
+        print("系统回答：这是普通文本问题，当前版本暂时不处理。")
 
 
 if __name__ == "__main__":

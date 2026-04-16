@@ -1,6 +1,7 @@
 import router
 import video_processor
 import analysis
+import answer_generator
 
 
 def main():
@@ -16,19 +17,18 @@ def main():
 
         if task_detail == "duration" or task_detail == "frame_count":
             result = video_processor.process_video("test.mp4", task_detail)
-            print("处理结果：", result)
 
         elif task_detail == "motion":
             result = analysis.analyze_motion("test.mp4")
-            print("处理结果：", result)
 
         elif task_detail == "summary":
             result = analysis.analyze_summary("test.mp4")
-            print("处理结果：", result)
 
         else:
             result = analysis.analyze_video_content("test.mp4")
-            print("处理结果：", result)
+
+        answer = answer_generator.generate_answer(task_detail, result)
+        print("回答：", answer)
 
     elif task_type == "image":
         print("暂时还不支持图像处理")

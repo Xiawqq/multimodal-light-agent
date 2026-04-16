@@ -21,6 +21,9 @@ def main():
         elif task_detail == "motion":
             result = analysis.analyze_motion("test.mp4")
 
+        elif task_detail == "change_time":
+            result = analysis.analyze_change_time("test.mp4")
+
         elif task_detail == "summary":
             result = analysis.analyze_summary("test.mp4")
 

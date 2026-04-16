@@ -24,6 +24,9 @@ def route_video_question(question: str):
     elif "多少帧" in question or "帧数" in question or "frame" in question:
         return "frame_count"
 
+    elif "什么时候变化" in question or "何时变化" in question or "变化最明显" in question:
+        return "change_time"
+
     elif "活动" in question or "运动" in question:
         return "motion"
 

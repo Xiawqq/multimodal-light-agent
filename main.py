@@ -5,7 +5,7 @@ import answer_generator
 from tools import execute_tool
 
 # 测试视频路径     C:\Users\adnim\Desktop\Agent\test.mp4
-
+# 测试图像路径     C:\Users\adnim\Desktop\Agent\test.jpg
 
 # 检测视频文件是否能正常读取
 def is_video_readable(video_path: str) -> bool:     # 规定返回结果为布尔值
@@ -62,8 +62,28 @@ def main():
         answer = answer_generator.generate_answer(task_detail, result)
         print(answer)
 
+    # # 图像模态
     elif task_type == "image":
-        print("系统回答：当前版本暂时还不支持图像处理。")
+
+        image_path = input("请输入图片文件路径：").strip()
+
+        # # # 打开视频出现问题的情况
+        if not image_path:
+            print("系统回答：图片路径不能为空。")
+            return
+
+        if not os.path.exists(image_path):
+            print("系统回答：图片文件不存在，请检查路径是否正确。")
+            return
+
+        # # # 分析视频模态子任务，并进入对应的模块
+        task_detail = router.route_image_question(question)
+        print("系统识别的图片子任务是：", task_detail)
+
+        result = execute_tool("image", task_detail, image_path)
+
+        answer = answer_generator.generate_answer(task_detail, result)
+        print(answer)
 
     else:
         print("系统回答：当前版本暂时还不支持普通文本问题处理。")

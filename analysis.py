@@ -6,14 +6,14 @@
 
 
 import cv2
-
+from utils import open_video
 
 # 判读视频内容是否产生明显运动
 def detect_motion(video_path: str):
 
-    cap = cv2.VideoCapture(video_path)
+    cap = open_video(video_path)
 
-    if not cap.isOpened():
+    if cap is None:
         return "视频打开失败，无法进行运动分析。"
 
     prev_gray = None         # 存储上一帧的灰度图（初始为空）
@@ -54,9 +54,10 @@ def detect_motion(video_path: str):
 
 # 判读视频运动高峰并记录发生时间
 def detect_peak_change_time(video_path: str):
-    cap = cv2.VideoCapture(video_path)
 
-    if not cap.isOpened():
+    cap = open_video(video_path)
+
+    if cap is None:
         return "视频打开失败，无法定位变化时间。"
 
     fps = cap.get(cv2.CAP_PROP_FPS)

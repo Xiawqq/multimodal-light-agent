@@ -6,14 +6,15 @@
 
 
 import cv2
+from utils import open_video
 
 
 # 播放完整视频
 def play_video(video_path):
 
-    cap = cv2.VideoCapture(video_path)
+    cap = open_video(video_path)
 
-    if not cap.isOpened():
+    if cap is None:
         print("视频打开失败")
         return
 
@@ -36,9 +37,10 @@ def play_video(video_path):
 
 # 展示视频第一帧
 def show_first_frame(video_path):
-    cap=cv2.VideoCapture(video_path)
 
-    if not cap.isOpened():
+    cap = open_video(video_path)
+
+    if cap is None:
         print("视频打开失败")
         return
 
@@ -56,9 +58,10 @@ def show_first_frame(video_path):
 
 # 计算视频总帧数
 def count_frames(video_path: str):
-    cap = cv2.VideoCapture(video_path)
 
-    if not cap.isOpened():
+    cap = open_video(video_path)
+
+    if cap is None:
         return -1
 
     frame_count = 0
@@ -76,9 +79,10 @@ def count_frames(video_path: str):
 
 # 获取视频 FPS
 def get_video_fps(video_path: str):
-    cap = cv2.VideoCapture(video_path)
 
-    if not cap.isOpened():
+    cap = open_video(video_path)
+
+    if cap is None:
         return -1
 
     fps = cap.get(cv2.CAP_PROP_FPS)

@@ -85,8 +85,22 @@ def main():
         answer = answer_generator.generate_answer(task_detail, result)
         print(answer)
 
+
+    # # 文本模态
     else:
-        print("系统回答：当前版本暂时还不支持普通文本问题处理。")
+        text_input = input("请输入要处理的文本内容：").strip()
+
+        if not text_input:
+            print("系统回答：文本内容不能为空。")
+            return
+
+        task_detail = router.route_text_question(question)
+        print("系统识别的文本子任务是：", task_detail)
+
+        result = execute_tool("text", task_detail, text_input)
+
+        answer = answer_generator.generate_answer(task_detail, result)
+        print(answer)
 
 
 if __name__ == "__main__":

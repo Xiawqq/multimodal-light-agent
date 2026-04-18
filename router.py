@@ -49,3 +49,11 @@ def route_image_question(question: str):
         return "size"
     else:
         return "size"
+
+
+# 文本模态细分
+def route_text_question(question: str):
+    if "多少字" in question or "长度" in question or "多长" in question:
+        return "length"
+    else:
+        return "length"

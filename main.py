@@ -2,7 +2,7 @@ import os
 import cv2
 import router
 import answer_generator
-from tools import execute_video_tool
+from tools import execute_tool
 
 # 测试视频路径     C:\Users\adnim\Desktop\Agent\test.mp4
 
@@ -57,7 +57,7 @@ def main():
         task_detail = router.route_video_question(question)
         print("系统识别的视频子任务是：", task_detail)
 
-        result = execute_video_tool(task_detail, video_path)
+        result = execute_tool("video", task_detail, video_path)
 
         answer = answer_generator.generate_answer(task_detail, result)
         print(answer)

@@ -48,14 +48,35 @@ VIDEO_TOOLS = {
     },
 }
 
-# 视频处理工具选择
-def execute_video_tool(task_detail: str, video_path: str):
-    tool_info = VIDEO_TOOLS.get(task_detail)
+
+# 现存的图像工具库
+IMAGE_TOOLS = {}
+
+
+# 现存的文本工具库
+TEXT_TOOLS = {}
+
+
+# 多模态工具库合集
+ALL_TOOLS = {
+    "video": VIDEO_TOOLS,
+    "image": IMAGE_TOOLS,
+    "text": TEXT_TOOLS,
+}
+
+
+# 处理工具选择
+def execute_tool(modality: str, task_detail: str, input_data: str):
+    modality_tools = ALL_TOOLS.get(modality)
+
+    if modality_tools is None:
+        return "暂时不支持该模态。"
+
+    tool_info = modality_tools.get(task_detail)
 
     if tool_info is None:
-        return "暂时无法处理该视频任务。"
+        return f"暂时无法处理该{modality}任务。"
 
     print("系统选择的工具是：", tool_info["name"])
-
     tool_func = tool_info["func"]
-    return tool_func(video_path)
+    return tool_func(input_data)

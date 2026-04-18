@@ -1,7 +1,7 @@
 import video_processor
 import analysis
 import image_processor
-
+import text_processor
 
 # 现存的视频工具库
 VIDEO_TOOLS = {
@@ -62,7 +62,14 @@ IMAGE_TOOLS = {
 
 
 # 现存的文本工具库
-TEXT_TOOLS = {}
+TEXT_TOOLS = {
+    "length": {
+        "name": "get_text_length",
+        "description": "统计文本字符长度",
+        "modality": "text",
+        "func": text_processor.get_text_length,
+    }
+}
 
 
 # 多模态工具库合集

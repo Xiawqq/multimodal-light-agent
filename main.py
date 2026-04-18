@@ -5,6 +5,7 @@ import video_processor
 import analysis
 import answer_generator
 
+# 测试视频路径     C:\Users\adnim\Desktop\Agent\test.mp4
 
 # 检测视频文件是否能正常读取
 def is_video_readable(video_path: str) -> bool:     # 规定返回结果为布尔值
@@ -61,6 +62,9 @@ def main():
 
         elif task_detail == "frame_count":
             result = video_processor.get_video_frame_count(video_path)
+
+        elif task_detail == "fps":
+            result = video_processor.get_video_fps(video_path)
 
         elif task_detail == "motion":
             result = analysis.analyze_motion(video_path)

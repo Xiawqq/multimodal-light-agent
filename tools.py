@@ -1,5 +1,6 @@
 import video_processor
 import analysis
+import image_processor
 
 
 # 现存的视频工具库
@@ -50,7 +51,14 @@ VIDEO_TOOLS = {
 
 
 # 现存的图像工具库
-IMAGE_TOOLS = {}
+IMAGE_TOOLS = {
+    "size": {
+        "name": "get_image_size",
+        "description": "获取图片宽度和高度",
+        "modality": "image",
+        "func": image_processor.get_image_size,
+    }
+}
 
 
 # 现存的文本工具库

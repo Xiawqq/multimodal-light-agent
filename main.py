@@ -56,8 +56,11 @@ def main():
         task_detail = router.route_video_question(question)
         print("系统识别的视频子任务是：", task_detail)
 
-        if task_detail == "duration" or task_detail == "frame_count":
-            result = video_processor.process_video(video_path, task_detail)
+        if task_detail == "duration":
+            result = video_processor.get_video_duration(video_path)
+
+        elif task_detail == "frame_count":
+            result = video_processor.get_video_frame_count(video_path)
 
         elif task_detail == "motion":
             result = analysis.analyze_motion(video_path)

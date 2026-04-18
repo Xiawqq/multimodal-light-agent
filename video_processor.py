@@ -57,57 +57,52 @@ def show_first_frame(video_path):
 
 
 # 计算视频总帧数
-def count_frames(video_path: str):
+def get_video_frame_count(video_path: str):
 
     cap = open_video(video_path)
 
-    if cap is None:
-        return -1
+    if cap is None:     # 视频能不能打开
+        return "视频打开失败或无法获取视频信息"
 
-    frame_count = 0
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-    while 1:
-        ret, frame = cap.read()
-        if ret == False :
-            break
-        else:
-            frame_count += 1
+    if frame_count <= 0:    # 视频打开了有没有内容
+        return "视频打开失败或无法获取视频信息"
 
     cap.release()
-    return frame_count
+    return f"视频总帧数为：{frame_count}"
 
 
 # 获取视频 FPS
 def get_video_fps(video_path: str):
+    cap = open_video(video_path)
+
+    if cap is None:     # 视频能不能打开
+        return -1
+
+    fps = cap.get(cv2.CAP_PROP_FPS)
+
+    if fps <= 0:    # 视频打开了有没有内容
+        return -1
+
+    cap.release()
+    return f"视频总帧数为：{fps}"
+
+
+# 计算视频时长
+def get_video_duration(video_path: str):
 
     cap = open_video(video_path)
 
     if cap is None:
-        return -1
+        return "视频打开失败或无法获取视频信息"
 
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     fps = cap.get(cv2.CAP_PROP_FPS)
-    cap.release()
 
-    return fps
-
-
-# 计算视频总帧数 + 展示第一帧 + 交互说明
-def process_video(video_path: str, task_detail: str):
-
-    frame_count = count_frames(video_path)
-    fps = get_video_fps(video_path)
-
-    if frame_count == -1 or fps == -1 or fps == 0:
+    if frame_count <= 0 or fps <= 0:
         return "视频打开失败或无法获取视频信息"
 
     duration = frame_count / fps
-
-    if task_detail == "duration":
-        return f"视频时长约为：{duration:.2f} 秒"
-
-    elif task_detail == "frame_count":
-        return f"视频总帧数为：{frame_count}"
-
-    else:
-        show_first_frame(video_path)
-        return f"已成功读取并展示视频第一帧，视频总帧数为：{frame_count}，视频时长约为：{duration:.2f} 秒"
+    cap.release()
+    return f"视频时长约为：{duration:.2f} 秒"

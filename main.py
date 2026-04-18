@@ -7,6 +7,18 @@ import answer_generator
 
 # 测试视频路径     C:\Users\adnim\Desktop\Agent\test.mp4
 
+# 现存的视频工具库
+VIDEO_TOOLS = {
+    "duration": video_processor.get_video_duration,
+    "frame_count": video_processor.get_video_frame_count,
+    "fps": video_processor.get_video_fps,
+    "motion": analysis.analyze_motion,
+    "change_time": analysis.analyze_change_time,
+    "summary": analysis.analyze_summary,
+    "content": analysis.analyze_video_content,
+}
+
+
 # 检测视频文件是否能正常读取
 def is_video_readable(video_path: str) -> bool:     # 规定返回结果为布尔值
     cap = cv2.VideoCapture(video_path)
@@ -14,6 +26,16 @@ def is_video_readable(video_path: str) -> bool:     # 规定返回结果为布�
         return False
     cap.release()
     return True
+
+
+# 视频处理工具选择
+def execute_video_tool(task_detail: str, video_path: str):
+    tool_func = VIDEO_TOOLS.get(task_detail)
+
+    if tool_func is None:
+        return "暂时无法处理该视频任务。"
+
+    return tool_func(video_path)
 
 
 def main():
@@ -57,26 +79,7 @@ def main():
         task_detail = router.route_video_question(question)
         print("系统识别的视频子任务是：", task_detail)
 
-        if task_detail == "duration":
-            result = video_processor.get_video_duration(video_path)
-
-        elif task_detail == "frame_count":
-            result = video_processor.get_video_frame_count(video_path)
-
-        elif task_detail == "fps":
-            result = video_processor.get_video_fps(video_path)
-
-        elif task_detail == "motion":
-            result = analysis.analyze_motion(video_path)
-
-        elif task_detail == "change_time":
-            result = analysis.analyze_change_time(video_path)
-
-        elif task_detail == "summary":
-            result = analysis.analyze_summary(video_path)
-
-        else:
-            result = analysis.analyze_video_content(video_path)
+        result = execute_video_tool(task_detail, video_path)
 
         answer = answer_generator.generate_answer(task_detail, result)
         print(answer)

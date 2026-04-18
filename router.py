@@ -1,6 +1,9 @@
-'''
+"""
+
 路由模块
-'''
+
+"""
+
 
 # 判断使用哪个模态
 def route_question(question: str):
@@ -8,7 +11,7 @@ def route_question(question: str):
 
     if "视频" in question or "video" in question:
         return "video"
-    elif "图" in question or "image" in question:
+    elif "图片" in question or "图像" in question or "照片" in question:
         return "image"
     else:
         return "text"
@@ -38,3 +41,11 @@ def route_video_question(question: str):
 
     else:
         return "content"
+
+
+# 图像模态细分
+def route_image_question(question: str):
+    if "多大" in question or "尺寸" in question or "宽高" in question:
+        return "size"
+    else:
+        return "size"

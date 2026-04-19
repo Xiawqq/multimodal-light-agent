@@ -144,16 +144,31 @@ def describe_tools(modality: str) -> str:
 
 # 处理工具选择
 def execute_tool(modality: str, task_detail: str, input_data: str):
+
     modality_tools = ALL_TOOLS.get(modality)
 
+    # # 模态不支持
     if modality_tools is None:
         return "暂时不支持该模态。"
 
     tool_info = modality_tools.get(task_detail)
 
+    # # 模态支持，但是无法处理该子任务
     if tool_info is None:
         return f"暂时无法处理该{modality}任务。"
 
     print("系统选择的工具是：", tool_info["name"])
     tool_func = tool_info["func"]
-    return tool_func(input_data)
+
+    # # 工具防崩溃
+    try:
+        result = tool_func(input_data)
+
+        # # # 工具执行完成，但未返回有效结果
+        if result is None:
+            return "工具执行完成，但未返回有效结果。"
+        else:
+            return result
+    # # # 问题信息反馈
+    except Exception as e:
+        return f"工具执行失败，错误信息：{str(e)}"

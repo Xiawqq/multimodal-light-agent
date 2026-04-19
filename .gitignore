@@ -12,3 +12,4 @@ practice/
 # data
 *.mp4
 *.jpg
+.vscode/settings.json

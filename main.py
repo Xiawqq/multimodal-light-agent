@@ -2,7 +2,7 @@ import os
 import cv2
 import router
 import answer_generator
-from tools import execute_tool
+from tools import execute_tool, describe_tools
 
 # 测试视频路径     C:\Users\adnim\Desktop\Agent\test.mp4
 # 测试图像路径     C:\Users\adnim\Desktop\Agent\test.jpg
@@ -57,6 +57,8 @@ def main():
         task_detail = router.route_video_question(question)
         print("系统识别的视频子任务是：", task_detail)
 
+        print(describe_tools("video"))
+
         result = execute_tool("video", task_detail, video_path)
 
         answer = answer_generator.generate_answer(task_detail, result)
@@ -80,6 +82,8 @@ def main():
         task_detail = router.route_image_question(question)
         print("系统识别的图片子任务是：", task_detail)
 
+        print(describe_tools("image"))
+
         result = execute_tool("image", task_detail, image_path)
 
         answer = answer_generator.generate_answer(task_detail, result)
@@ -96,6 +100,8 @@ def main():
 
         task_detail = router.route_text_question(question)
         print("系统识别的文本子任务是：", task_detail)
+
+        print(describe_tools("text"))
 
         result = execute_tool("text", task_detail, text_input)
 

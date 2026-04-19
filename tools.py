@@ -116,6 +116,32 @@ ALL_TOOLS = {
 }
 
 
+# 取得对应模态一整组工具字典
+def get_tools_by_modality(modality: str):
+    return ALL_TOOLS.get(modality, {})
+
+
+# 展示取得的对应模态一整组工具字典
+def describe_tools(modality: str) -> str:
+    modality_tools = get_tools_by_modality(modality)
+
+    if not modality_tools:
+        return f"当前 {modality} 模态下暂无可用工具。"
+
+    lines = [f"当前 {modality} 模态下可用工具："]
+    for tool_key, tool_info in modality_tools.items():
+        line = (
+            f"- {tool_key} | "
+            f"name={tool_info['name']} | "
+            f"description={tool_info['description']} | "
+            f"input={tool_info['input_type']} | "
+            f"output={tool_info['output_type']}"
+        )
+        lines.append(line)
+
+    return "\n".join(lines)
+
+
 # 处理工具选择
 def execute_tool(modality: str, task_detail: str, input_data: str):
     modality_tools = ALL_TOOLS.get(modality)

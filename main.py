@@ -56,11 +56,17 @@ def main():
         # # # 分析视频模态子任务，并进入对应的模块
         task_detail = router.route_video_question(question)
         print("系统识别的视频子任务是：", task_detail)
+        print()
 
+        print("[当前可用工具]")
         print(describe_tools("video"))
+        print()
 
+        print("[执行决策]")
         result = execute_tool("video", task_detail, video_path)
+        print()
 
+        print("[最终回答]")
         answer = answer_generator.generate_answer(task_detail, result)
         print(answer)
 
@@ -80,12 +86,18 @@ def main():
 
         # # # 分析视频模态子任务，并进入对应的模块
         task_detail = router.route_image_question(question)
-        print("系统识别的图片子任务是：", task_detail)
+        print("系统识别的图像子任务是：", task_detail)
+        print()
 
+        print("[当前可用工具]")
         print(describe_tools("image"))
+        print()
 
+        print("[执行决策]")
         result = execute_tool("image", task_detail, image_path)
+        print()
 
+        print("[最终回答]")
         answer = answer_generator.generate_answer(task_detail, result)
         print(answer)
 
@@ -100,11 +112,17 @@ def main():
 
         task_detail = router.route_text_question(question)
         print("系统识别的文本子任务是：", task_detail)
+        print()
 
+        print("[当前可用工具]")
         print(describe_tools("text"))
+        print()
 
+        print("[执行决策]")
         result = execute_tool("text", task_detail, text_input)
+        print()
 
+        print("[最终回答]")
         answer = answer_generator.generate_answer(task_detail, result)
         print(answer)
 

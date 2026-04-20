@@ -117,6 +117,16 @@ TEXT_TOOLS = {
         "keywords": ["字数", "长度", "字符数"],
         "example_question": "这段文本有多少个字符？",
         "func": text_processor.get_text_length,
+    },
+    "stats": {
+        "name": "get_text_stats",
+        "description": "统计文本词数和句子数",
+        "modality": "text",
+        "input_type": "text",
+        "output_type": "text",
+        "keywords": ["词数", "句子数", "文本统计", "word count"],
+        "example_question": "这段文本有多少词和句子？",
+        "func": text_processor.get_text_stats,
     }
 }
 

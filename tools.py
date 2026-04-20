@@ -118,15 +118,25 @@ TEXT_TOOLS = {
         "example_question": "这段文本有多少个字符？",
         "func": text_processor.get_text_length,
     },
-    "stats": {
-        "name": "get_text_stats",
-        "description": "统计文本词数和句子数",
+    "word_count": {
+        "name": "get_text_word_count",
+        "description": "统计文本词数",
         "modality": "text",
         "input_type": "text",
         "output_type": "text",
-        "keywords": ["词数", "句子数", "文本统计", "word count"],
-        "example_question": "这段文本有多少词和句子？",
-        "func": text_processor.get_text_stats,
+        "keywords": ["词数", "多少词", "word count"],
+        "example_question": "这段文本有多少词？",
+        "func": text_processor.get_text_word_count,
+    },
+    "sentence_count": {
+        "name": "get_text_sentence_count",
+        "description": "统计文本句子数",
+        "modality": "text",
+        "input_type": "text",
+        "output_type": "text",
+        "keywords": ["句子数", "多少句", "sentence count"],
+        "example_question": "这段文本有多少句？",
+        "func": text_processor.get_text_sentence_count,
     }
 }
 

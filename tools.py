@@ -3,6 +3,19 @@ import analysis
 import image_processor
 import text_processor
 
+
+#  tool 统一字段清单
+TOOL_SCHEMA_FIELDS = [
+    "name",
+    "description",
+    "modality",
+    "input_type",
+    "output_type",
+    "keywords",
+    "example_question",
+    "func",
+]
+
 # 现存的视频工具库
 VIDEO_TOOLS = {
     "duration": {
@@ -114,6 +127,47 @@ ALL_TOOLS = {
     "image": IMAGE_TOOLS,
     "text": TEXT_TOOLS,
 }
+
+
+def validate_tool_schema(tool_key: str, tool_info: dict) -> list[str]:
+    """
+    检查单个工具的 metadata 是否符合统一 schema。
+    返回空列表表示校验通过；返回非空列表表示存在缺失或无效字段。
+    """
+    errors = []
+
+    # 逐项检查工具是否包含所有必需字段
+    for field in TOOL_SCHEMA_FIELDS:
+        if field not in tool_info:
+            errors.append(f"{tool_key} 缺少字段：{field}")
+
+    # func 字段必须是真正可调用的函数，否则 execute_tool 无法执行
+    if "func" in tool_info and not callable(tool_info["func"]):
+        errors.append(f"{tool_key} 的 func 不是可调用函数")
+
+    return errors
+
+
+def validate_all_tools() -> list[str]:
+    """
+    检查当前注册的所有工具是否符合统一 schema。
+    返回空列表表示全部工具通过校验；返回非空列表表示存在不合格工具。
+    """
+    # 全局错误汇总列表
+    errors = []
+
+    # 遍历 video / image / text 三类工具库（模态：工具集合）
+    for modality, modality_tools in ALL_TOOLS.items():
+
+        # 遍历当前模态下的每一个具体工具
+        for tool_key, tool_info in modality_tools.items():
+            # 生成唯一工具名：比如 video.play_video
+            full_tool_key = f"{modality}.{tool_key}"
+            # 调用单个工具校验函数，把错误全部加入总列表
+            errors.extend(validate_tool_schema(full_tool_key, tool_info))
+
+    # 返回所有工具的所有错误
+    return errors
 
 
 # 取得对应模态一整组工具字典

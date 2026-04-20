@@ -53,7 +53,18 @@ def route_image_question(question: str):
 
 # 文本模态细分
 def route_text_question(question: str):
-    if "多少字" in question or "长度" in question or "多长" in question:
+    question = question.lower()
+
+    # 用户询问词数时，路由到词数统计工具
+    if "词数" in question or "多少词" in question or "word count" in question:
+        return "word_count"
+
+    # 用户询问句子数量时，路由到句子数统计工具
+    elif "句子数" in question or "多少句" in question or "sentence count" in question:
+        return "sentence_count"
+
+    # 默认仍然返回文本长度工具，保持原有行为稳定
+    elif "多少字" in question or "长度" in question or "多长" in question:
         return "length"
     else:
         return "length"

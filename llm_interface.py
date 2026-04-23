@@ -7,6 +7,10 @@ LLM 接口层
 
 
 import os
+from dotenv import load_dotenv
+from openai import OpenAI
+
+load_dotenv()
 
 
 # 获取当前配置的 LLM provider
@@ -34,12 +38,43 @@ def rewrite_answer_with_openai(result: str) -> str:
     return result
 
 
+# DeepSeek provider 的回答重写入口
 def rewrite_answer_with_deepseek(result: str) -> str:
     """
-    预留 DeepSeek provider 的回答重写入口。
-    当前阶段先不实现真实调用，后续可按相同接口补充。
+    使用 DeepSeek 官方 API 对工具执行结果进行自然语言重写。
+    如果未配置 API Key 或调用失败，则回退到原始结果。
     """
-    return result
+    api_key = os.getenv("DEEPSEEK_API_KEY")
+    if not api_key:
+        return result
+
+    # 根据 DeepSeek 官方文档构造 API 请求，进行回答重写
+    model = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
+    client = OpenAI(
+        api_key=api_key,
+        base_url="https://api.deepseek.com",
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "请把给定的工具执行结果改写成简洁、自然、准确的中文回答，不要添加原结果中没有的新事实。",
+                },
+                {
+                    "role": "user",
+                    "content": result,
+                },
+            ],
+            temperature=0.3,
+        )
+
+        content = response.choices[0].message.content
+        return content.strip() if content else result
+    except Exception:
+        return result
 
 
 def rewrite_answer(result: str) -> str:

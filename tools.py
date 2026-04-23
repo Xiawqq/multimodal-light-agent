@@ -189,6 +189,21 @@ def get_tools_schema_by_modality(modality: str) -> list[dict]:
     return schemas
 
 
+# 取得所有模态下全部工具的 schema
+def get_all_tools_schema() -> dict:
+    """
+    获取所有已注册工具的结构化 schema。
+    返回按模态分组的字典，方便后续做工具发现或提供给 LLM 做全局工具选择。
+    """
+    all_schemas = {}
+
+    # 遍历所有模态，将每个模态下的工具统一转换成 schema 列表
+    for modality in ALL_TOOLS:
+        all_schemas[modality] = get_tools_schema_by_modality(modality)
+
+    return all_schemas
+
+
 # 校验单个工具是否符合统一 schema
 def validate_tool_schema(tool_key: str, tool_info: dict) -> list[str]:
     """

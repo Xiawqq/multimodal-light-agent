@@ -2,6 +2,7 @@ import os
 import cv2
 import router
 import answer_generator
+import llm_interface
 from tools import execute_tool, describe_tools
 
 # 测试视频路径     C:\Users\adnim\Desktop\Agent\test.mp4
@@ -48,8 +49,11 @@ def main():
         print("系统回答：问题不能为空，请重新输入。")
         return
 
+    # 先经过 AI 层的问题理解入口，当前阶段默认保持原问题不变
+    understood_question = llm_interface.understand_question(question)
+
     # 当前版本仅支持开放的一些模态
-    task_type = router.route_question(question)
+    task_type = router.route_question(understood_question)
 
     if task_type not in ["video", "image", "text"]:
         print("系统回答：暂时无法识别你的问题类型。")
@@ -77,7 +81,7 @@ def main():
             return
 
         # # # 分析视频模态子任务，并进入对应的模块
-        task_detail = router.route_task_detail(task_type, question)
+        task_detail = router.route_task_detail(task_type, understood_question)
 
         handle_modality_task("video", task_detail, video_path, "视频")
 
@@ -96,7 +100,7 @@ def main():
             return
 
         # # # 分析视频模态子任务，并进入对应的模块
-        task_detail = router.route_task_detail(task_type, question)
+        task_detail = router.route_task_detail(task_type, understood_question)
 
         handle_modality_task("image", task_detail, image_path, "图像")
 
@@ -109,7 +113,7 @@ def main():
             print("系统回答：文本内容不能为空。")
             return
 
-        task_detail = router.route_task_detail(task_type, question)
+        task_detail = router.route_task_detail(task_type, understood_question)
 
         handle_modality_task("text", task_detail, text_input, "文本")
 

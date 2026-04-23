@@ -68,3 +68,17 @@ def route_text_question(question: str):
         return "length"
     else:
         return "length"
+
+
+# 按当前模态分发到对应的子任务路由函数
+def route_task_detail(modality: str, question: str):
+    """
+    根据已经识别出的模态，继续路由到对应的子任务。
+    这样主流程只需要知道当前模态，不需要自己判断该调用哪个 route_xxx_question。
+    """
+    if modality == "video":
+        return route_video_question(question)
+    elif modality == "image":
+        return route_image_question(question)
+    else:
+        return route_text_question(question)

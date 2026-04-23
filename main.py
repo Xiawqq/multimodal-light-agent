@@ -77,7 +77,7 @@ def main():
             return
 
         # # # 分析视频模态子任务，并进入对应的模块
-        task_detail = router.route_video_question(question)
+        task_detail = router.route_task_detail(task_type, question)
 
         handle_modality_task("video", task_detail, video_path, "视频")
 
@@ -96,7 +96,7 @@ def main():
             return
 
         # # # 分析视频模态子任务，并进入对应的模块
-        task_detail = router.route_image_question(question)
+        task_detail = router.route_task_detail(task_type, question)
 
         handle_modality_task("image", task_detail, image_path, "图像")
 
@@ -109,7 +109,7 @@ def main():
             print("系统回答：文本内容不能为空。")
             return
 
-        task_detail = router.route_text_question(question)
+        task_detail = router.route_task_detail(task_type, question)
 
         handle_modality_task("text", task_detail, text_input, "文本")
 

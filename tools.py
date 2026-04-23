@@ -16,6 +16,7 @@ TOOL_SCHEMA_FIELDS = [
     "func",
 ]
 
+
 # 现存的视频工具库
 VIDEO_TOOLS = {
     "duration": {
@@ -149,47 +150,9 @@ ALL_TOOLS = {
 }
 
 
-# 生成单个工具的 schema，并进行校验，返回错误信息列表
-def validate_tool_schema(tool_key: str, tool_info: dict) -> list[str]:
-    """
-    检查单个工具的 metadata 是否符合统一 schema。
-    返回空列表表示校验通过；返回非空列表表示存在缺失或无效字段。
-    """
-    errors = []
-
-    # 逐项检查工具是否包含所有必需字段
-    for field in TOOL_SCHEMA_FIELDS:
-        if field not in tool_info:
-            errors.append(f"{tool_key} 缺少字段：{field}")
-
-    # func 字段必须是真正可调用的函数，否则 execute_tool 无法执行
-    if "func" in tool_info and not callable(tool_info["func"]):
-        errors.append(f"{tool_key} 的 func 不是可调用函数")
-
-    return errors
-
-
-# 生成所有工具的 schema，并进行校验，返回所有错误信息列表
-def validate_all_tools() -> list[str]:
-    """
-    检查当前注册的所有工具是否符合统一 schema。
-    返回空列表表示全部工具通过校验；返回非空列表表示存在不合格工具。
-    """
-    # 全局错误汇总列表
-    errors = []
-
-    # 遍历 video / image / text 三类工具库（模态：工具集合）
-    for modality, modality_tools in ALL_TOOLS.items():
-
-        # 遍历当前模态下的每一个具体工具
-        for tool_key, tool_info in modality_tools.items():
-            # 生成唯一工具名：比如 video.play_video
-            full_tool_key = f"{modality}.{tool_key}"
-            # 调用单个工具校验函数，把错误全部加入总列表
-            errors.extend(validate_tool_schema(full_tool_key, tool_info))
-
-    # 返回所有工具的所有错误
-    return errors
+# 取得对应模态一整组工具字典
+def get_tools_by_modality(modality: str):
+    return ALL_TOOLS.get(modality, {})
 
 
 # 生成单个工具 schema，用于展示或提供给 LLM 使用
@@ -210,11 +173,6 @@ def get_tool_schema(tool_key: str, tool_info: dict) -> dict:
     }
 
 
-# 取得对应模态一整组工具字典
-def get_tools_by_modality(modality: str):
-    return ALL_TOOLS.get(modality, {})
-
-
 # 取得对应模态一整组工具的 schema 列表
 def get_tools_schema_by_modality(modality: str) -> list[dict]:
     """
@@ -229,6 +187,49 @@ def get_tools_schema_by_modality(modality: str) -> list[dict]:
         schemas.append(get_tool_schema(tool_key, tool_info))
 
     return schemas
+
+
+# 校验单个工具是否符合统一 schema
+def validate_tool_schema(tool_key: str, tool_info: dict) -> list[str]:
+    """
+    检查单个工具的 metadata 是否符合统一 schema。
+    返回空列表表示校验通过；返回非空列表表示存在缺失或无效字段。
+    """
+    errors = []
+
+    # 逐项检查工具是否包含所有必需字段
+    for field in TOOL_SCHEMA_FIELDS:
+        if field not in tool_info:
+            errors.append(f"{tool_key} 缺少字段：{field}")
+
+    # func 字段必须是真正可调用的函数，否则 execute_tool 无法执行
+    if "func" in tool_info and not callable(tool_info["func"]):
+        errors.append(f"{tool_key} 的 func 不是可调用函数")
+
+    return errors
+
+
+# 校验所有已注册工具是否符合统一 schema
+def validate_all_tools() -> list[str]:
+    """
+    检查当前注册的所有工具是否符合统一 schema。
+    返回空列表表示全部工具通过校验；返回非空列表表示存在不合格工具。
+    """
+    # 全局错误汇总列表
+    errors = []
+
+    # 遍历 video / image / text 三类工具库（模态：工具集合）
+    for modality, modality_tools in ALL_TOOLS.items():
+
+        # 遍历当前模态下的每一个具体工具
+        for tool_key, tool_info in modality_tools.items():
+            # 生成唯一工具名：比如 video.play_video
+            full_tool_key = f"{modality}.{tool_key}"
+            # 调用单个工具校验函数，把错误全部加入总列表
+            errors.extend(validate_tool_schema(full_tool_key, tool_info))
+
+    # 返回所有工具的所有错误
+    return errors
 
 
 # 展示取得的对应模态一整组工具字典，供用户选择

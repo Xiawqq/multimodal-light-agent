@@ -215,6 +215,22 @@ def get_tools_by_modality(modality: str):
     return ALL_TOOLS.get(modality, {})
 
 
+# 取得对应模态一整组工具的 schema 列表
+def get_tools_schema_by_modality(modality: str) -> list[dict]:
+    """
+    获取指定模态下所有工具的结构化 schema。
+    返回列表形式，方便后续展示、日志记录或提供给 LLM 做工具选择。
+    """
+    modality_tools = get_tools_by_modality(modality)
+    schemas = []
+
+    # 将当前模态下的每个工具都转换成不包含 func 的 schema
+    for tool_key, tool_info in modality_tools.items():
+        schemas.append(get_tool_schema(tool_key, tool_info))
+
+    return schemas
+
+
 # 展示取得的对应模态一整组工具字典，供用户选择
 def describe_tools(modality: str) -> str:
     modality_tools = get_tools_by_modality(modality)

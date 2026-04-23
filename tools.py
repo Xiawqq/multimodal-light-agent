@@ -268,6 +268,21 @@ def describe_tools(modality: str) -> str:
     return "\n".join(lines)
 
 
+# 展示取得的所有模态下全部工具字典，供用户选择
+def describe_all_tools() -> str:
+    """
+    展示所有模态下当前可用工具。
+    便于调试、项目展示，以及后续扩展成全局工具发现入口。
+    """
+    lines = ["当前系统全部可用工具："]
+
+    for modality in ALL_TOOLS:
+        lines.append(describe_tools(modality))
+        lines.append("")
+
+    return "\n".join(lines).strip()
+
+
 # 处理工具选择
 def execute_tool(modality: str, task_detail: str, input_data: str):
 

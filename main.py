@@ -3,7 +3,7 @@ import cv2
 import router
 import answer_generator
 import llm_interface
-from tools import execute_tool, describe_tools
+from tools import execute_tool, describe_tools, get_tools_schema_by_modality
 
 # 测试视频路径     C:\Users\adnim\Desktop\Agent\test.mp4
 # 测试图像路径     C:\Users\adnim\Desktop\Agent\test.jpg
@@ -59,6 +59,8 @@ def main():
         print("系统回答：暂时无法识别你的问题类型。")
         return
 
+    tools_schema = get_tools_schema_by_modality(task_type)
+
     # 确实问题可以被当前的多模态系统处理，开始处理
     print("系统识别的大类任务是：", task_type)
 
@@ -83,6 +85,9 @@ def main():
         # # # 分析视频模态子任务，并进入对应的模块
         task_detail = router.route_task_detail(task_type, understood_question)
 
+        llm_suggested_tool = llm_interface.choose_tool_with_llm(understood_question, tools_schema)
+        print("LLM 辅助建议工具：", llm_suggested_tool or "当前未启用")
+
         handle_modality_task("video", task_detail, video_path, "视频")
 
     # # 图像模态
@@ -101,6 +106,9 @@ def main():
 
         # # # 分析视频模态子任务，并进入对应的模块
         task_detail = router.route_task_detail(task_type, understood_question)
+        
+        llm_suggested_tool = llm_interface.choose_tool_with_llm(understood_question, tools_schema)
+        print("LLM 辅助建议工具：", llm_suggested_tool or "当前未启用")
 
         handle_modality_task("image", task_detail, image_path, "图像")
 
@@ -114,6 +122,9 @@ def main():
             return
 
         task_detail = router.route_task_detail(task_type, understood_question)
+
+        llm_suggested_tool = llm_interface.choose_tool_with_llm(understood_question, tools_schema)
+        print("LLM 辅助建议工具：", llm_suggested_tool or "当前未启用")
 
         handle_modality_task("text", task_detail, text_input, "文本")
 

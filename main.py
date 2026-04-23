@@ -21,6 +21,10 @@ def handle_modality_task(modality: str, task_detail: str, input_data: str, task_
     result = execute_tool(modality, task_detail, input_data)
     print()
 
+    print("[工具执行结果]")
+    print(result)
+    print()
+
     print("[最终回答]")
     answer = answer_generator.generate_answer(task_detail, result)
     print(answer)

@@ -149,6 +149,7 @@ ALL_TOOLS = {
 }
 
 
+# 生成单个工具的 schema，并进行校验，返回错误信息列表
 def validate_tool_schema(tool_key: str, tool_info: dict) -> list[str]:
     """
     检查单个工具的 metadata 是否符合统一 schema。
@@ -168,6 +169,7 @@ def validate_tool_schema(tool_key: str, tool_info: dict) -> list[str]:
     return errors
 
 
+# 生成所有工具的 schema，并进行校验，返回所有错误信息列表
 def validate_all_tools() -> list[str]:
     """
     检查当前注册的所有工具是否符合统一 schema。
@@ -190,12 +192,30 @@ def validate_all_tools() -> list[str]:
     return errors
 
 
+# 生成单个工具 schema，用于展示或提供给 LLM 使用
+def get_tool_schema(tool_key: str, tool_info: dict) -> dict:
+    """
+    生成适合展示或提供给 LLM 的工具 schema。
+    func 是内部执行函数，不暴露到 schema 中。
+    """
+    return {
+        "tool_key": tool_key,
+        "name": tool_info["name"],
+        "description": tool_info["description"],
+        "modality": tool_info["modality"],
+        "input_type": tool_info["input_type"],
+        "output_type": tool_info["output_type"],
+        "keywords": tool_info["keywords"],
+        "example_question": tool_info["example_question"],
+    }
+
+
 # 取得对应模态一整组工具字典
 def get_tools_by_modality(modality: str):
     return ALL_TOOLS.get(modality, {})
 
 
-# 展示取得的对应模态一整组工具字典
+# 展示取得的对应模态一整组工具字典，供用户选择
 def describe_tools(modality: str) -> str:
     modality_tools = get_tools_by_modality(modality)
 

@@ -5,9 +5,11 @@
 # Python
 __pycache__/
 *.pyc
+.venv/
 
 # temp
 practice/
+.tmp/
 
 # data
 *.mp4

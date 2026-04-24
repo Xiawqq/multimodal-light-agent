@@ -48,31 +48,39 @@ def rewrite_answer_with_deepseek(result: str) -> str:
     if not api_key:
         return result
 
-    # 根据 DeepSeek 官方文档构造 API 请求，进行回答重写
-    model = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
+    # # 根据 DeepSeek 官方文档构造 API 请求，进行回答重写
+    model = os.getenv("DEEPSEEK_MODEL", "deepseek-v4-flash")
     client = OpenAI(
         api_key=api_key,
         base_url="https://api.deepseek.com",
     )
-
+    # # 构造提示语，引导模型将工具结果改写成简洁、自然、准确的中文回答
     try:
         response = client.chat.completions.create(
             model=model,
+
+            # # 这里的提示语可以根据实际情况调整，以获得更符合预期的回答重写效果
             messages=[
+                # # # system 角色的提示语非常重要，它直接影响模型对重写任务的理解和执行效果
                 {
                     "role": "system",
                     "content": "请把给定的工具执行结果改写成简洁、自然、准确的中文回答，不要添加原结果中没有的新事实。",
                 },
+                # # # user 角色的内容就是工具执行的原始结果，模型需要基于这个内容进行重写
                 {
                     "role": "user",
                     "content": result,
                 },
             ],
+            # # 适当调整 temperature 参数，可以让模型生成的回答更有创造性或更保守，具体数值可以根据实际需求进行微调
             temperature=0.3,
         )
 
         content = response.choices[0].message.content
+
         return content.strip() if content else result
+    
+    # 捕获可能的异常，例如网络错误、API 错误等，确保在发生问题时系统仍能正常运行，并返回原始结果
     except Exception:
         return result
 
